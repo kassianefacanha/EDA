@@ -3,9 +3,6 @@
 #include <string>
 #include "Tree.h"
 
-// Definicao do struct Node
-// Em C++ os structs podem ter funcoes-membro, como
-// construtores, destrutores, etc.
 struct Node {
     int key;
     Node *left;
@@ -18,6 +15,7 @@ struct Node {
     }
 };
 
+
 // Construtor
 Tree::Tree(std::string serial) {
     _root = nullptr;
@@ -25,9 +23,7 @@ Tree::Tree(std::string serial) {
     _serializeTree(ss, &_root);
 }
 
-// Essa funcao recursiva recebe como entrada uma string contendo
-// uma versao serializada da arvore e recebe um ponteiro para ponteiro para o no raiz.
-// A funcao ler os dados e constroi a arvore seguindo um percurso em pre-ordem.
+
 void Tree::_serializeTree(std::stringstream& ss, Node **node) {
     std::string value;
     ss >> value;
@@ -39,13 +35,12 @@ void Tree::_serializeTree(std::stringstream& ss, Node **node) {
     _serializeTree(ss, &((*node)->right));
 }
 
-// Destrutor
+
 Tree::~Tree() {
     _root = _clear(_root);
 }
 
-// Essa funcao recebe uma raiz chamada node e
-// ela libera todos os nos decendentes de node e o proprio node.
+
 Node *Tree::_clear(Node *node) {
     if(node != nullptr) { // caso geral: vamos liberar essa arvore
         node->left = _clear(node->left);
@@ -55,16 +50,27 @@ Node *Tree::_clear(Node *node) {
     return nullptr;
 }
 
+void Tree::preorder() {
+    _preorder(_root);
+}
+
+void Tree::_preorder(Node *node) {
+    if(node != nullptr) { // Caso Geral
+        std::cout << node->key << " ";
+        _preorder(node->left);
+        _preorder(node->right);
+    }
+}
+
 void Tree::inorder() {
     _inorder(_root);
-    std::cout << std::endl;
 }
 
 void Tree::_inorder(Node *node) {
     if(node != nullptr) { // Caso Geral
         _inorder(node->left);
         std::cout << node->key << " ";
-        _inorder(node->right);
+        _inorder(node->right);  
     }
 }
 
@@ -88,33 +94,33 @@ void Tree::_bshow(Node *node, std::string heranca) {
         _bshow(node->left, heranca + "l");
 }
 
-int Tree::size() { //TODo
-_size(_root);
+
+int Tree::count_leaves() { // TODO
+_count_leaves(_root);
 }
 
-int Tree::_size(Node *node) { // TODO
-    if (node == NULL){
+int Tree::_count_leaves(Node *node) { // TODO
+ if(node == NULL)
         return 0;
-     } else{
-            int noL  = _size(node->left);
-            int noR  = _size(node->right);
-        return (noL + noR + 1);
-        }
+   if(node->left == NULL && node->right == NULL)
+        return 1;
+   return _count_leaves(node->left) + _count_leaves(node->right);
 }
 
-int Tree::height() { // TODO
-_height(_root);
+void Tree::delete_leaves() { // TODO
+  
 }
 
-int Tree::_height(Node *node) { // TODO
-    if(node == NULL){
-        return 0;
-    } else {
-        return ((_height(node->left) >
-                    _height(node->right) ? _height(node->left) : _height(node->right) ) + 1);
-    }
+Node* Tree::_delete_leaves(Node *node) { // TODO
 
 }
 
+void Tree::delete_leaves_with_value(int key) { // TODO
+
+}
+
+Node* Tree::_delete_leaves_with_value(int key, Node *node) { // TODO
+
+}
 
 
