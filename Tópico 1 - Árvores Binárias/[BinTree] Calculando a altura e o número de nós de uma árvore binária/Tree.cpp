@@ -96,9 +96,9 @@ int Tree::_size(Node *node) { // TODO
     if (node == NULL){
         return 0;
      } else{
-            int noL  = _size(node->left);
-            int noR  = _size(node->right);
-        return (noL + noR + 1);
+            int leftNode   = _size(node->left);
+            int rightNode  = _size(node->right);
+        return (leftNode + rightNode + 1);
         }
 }
 

@@ -96,7 +96,7 @@ void Tree::_bshow(Node *node, std::string heranca) {
 
 
 int Tree::count_leaves() { // TODO
-_count_leaves(_root);
+return _count_leaves(_root);
 }
 
 int Tree::_count_leaves(Node *node) { // TODO
@@ -108,19 +108,37 @@ int Tree::_count_leaves(Node *node) { // TODO
 }
 
 void Tree::delete_leaves() { // TODO
-  
+  _delete_leaves(_root);
 }
 
 Node* Tree::_delete_leaves(Node *node) { // TODO
-
+    if (node == NULL) return NULL;
+    if (node->left == NULL && node->right == NULL) {
+       _clear(node);
+        return NULL;
+    }
+    node->left = _delete_leaves(node->left);
+    node->right = _delete_leaves(node->right);
+  
+    return node;
 }
 
 void Tree::delete_leaves_with_value(int key) { // TODO
-
+_delete_leaves_with_value(key, _root);
 }
 
 Node* Tree::_delete_leaves_with_value(int key, Node *node) { // TODO
-
+ if (node == NULL)
+        return nullptr;
+    node->left = _delete_leaves_with_value(key, node->left);
+    node->right = _delete_leaves_with_value(key, node->right);   
+  
+    if (node-> key == key && node->left == NULL && 
+                          node->right == NULL) {
+         
+        return nullptr;
+    }
+    return node;
 }
 
 

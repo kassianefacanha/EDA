@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include "Tree.h"
+#include <stack>
 
 struct Node {
     int key;
@@ -67,11 +68,27 @@ void Tree::_bshow(Node *node, std::string heranca) {
 
 
 int Tree::size() { // TODO
-    
+   return _size_iterativo(_root);
 }
 
 int Tree::_size_iterativo(Node *node) { // TODO
-    
+     if (node == NULL)
+        return 0;
+    std::stack<Node *>stk;
+    int count = 0; 
+    stk.push(node);
+    while (!stk.empty())
+    {
+        Node *temp = stk.top();
+        stk.pop();
+            count++; 
+        if (temp->left != NULL)
+            stk.push(temp->left);
+        if (temp->right != NULL)
+            stk.push(temp->right);
+             
+    }
+    return count;
 }
 
 

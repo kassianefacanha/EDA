@@ -2,7 +2,7 @@
 #include <sstream>
 #include <string>
 #include "Tree.h"
-
+#include <stdio.h>
 struct Node {
     int key;
     Node *left;
@@ -26,7 +26,7 @@ Tree::Tree(std::string serial) {
 }
 
 Tree::~Tree() {
-    _root = _clear(_root);
+   _root = _clear(_root);
 }
 
 void Tree::_serializeTree(std::stringstream& ss, Node **node) {
@@ -83,19 +83,41 @@ void Tree::_bshow(Node *node, std::string heranca) {
 }
 
 
-bool Tree::identical(Tree *t) { // TODO
-
+bool Tree::identical(Tree *t) { // TODO 
+    return _identical(_root, _root);
 }
 
 bool Tree::_identical(Node *nd1, Node *nd2) { // TODO
-
+ if (nd1 == NULL && nd2 == NULL) 
+        return 1; 
+  
+    if (nd1 != NULL && nd2 != NULL) { 
+        if(   nd1->key == nd2->key && 
+            _identical(nd1->left,nd2->left) && 
+            _identical(nd1->right,nd2->right) )
+        return true;
+    } 
+      
+   
+    return false;
 }
 
 Tree *Tree::clone() { // TODO
-
+    Tree * novaTree = new Tree;
+    novaTree -> _root = _clone(_root);
+    return novaTree;
 }
 
+
+
 Node *Tree::_clone(Node *node) { // TODO
+ 
+if(node == NULL) return NULL;
+
+    Node newNode(node->key);
+    newNode.left = _clone(node->left);
+    newNode.right = _clone(node->right);
+    return &newNode;
 
 }
 

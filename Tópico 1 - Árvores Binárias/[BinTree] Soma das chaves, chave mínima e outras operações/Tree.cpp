@@ -3,6 +3,7 @@
 #include <string>
 #include <climits>
 #include "Tree.h"
+int  count, soma ;
 
 struct Node {
     int key;
@@ -81,39 +82,73 @@ void Tree::_bshow(Node *node, std::string heranca) {
 
 
 int Tree::sum_keys() { // TODO
-    
+    return _sum_keys(_root);
 }
 
 int Tree::_sum_keys(Node *node) { // TODO
-
+if (node == NULL)
+        return 0;
+    return (node->key + _sum_keys(node->left) + _sum_keys(node->right));
 }
 
 // Para fazer essa funcao, suponha que as arvores dos testes nunca serao vazias,
 // assim, sempre havera um menor valor de chave a ser retornado
 int Tree::min_key() { // TODO
-
+   return _min_key(_root);
 }
 
 
 // Supoe que o ponteiro recebido sempre eh diferente de nullptr
 int Tree::_min_key(Node *node) { // TODO
-
+    if (node == NULL)
+      return INT_MAX;
+    int keyNode = node->key;
+    int leftNode  = _min_key(node->left);
+    int rightNode = _min_key(node->right);
+    if (leftNode < keyNode)
+      keyNode = leftNode;
+    if (rightNode < res)
+      keyNode = rightNode;
+    return keyNode;
 }
 
 int Tree::total_internal_nodes() { // TODO
-
+   return _total_internal_nodes(_root);
 }
     
 int Tree::_total_internal_nodes(Node *node) { // TODO
-
+      if(node != NULL)
+            {
+                _total_internal_nodes(node->left);
+                if((node->left != NULL) || (node->right != NULL))
+                {
+                    count++;
+                }
+                _total_internal_nodes(node->right);
+            }
+            return count;
 }
 
 int Tree::um_filho() { // TODO
-
+    return _um_filho(_root); 
 }
 
 int Tree::_um_filho(Node *node) { // TODO
+  if (node == NULL)
+    return soma;
+  if (node->left != NULL && node->right == NULL ||
+      node->left == NULL && node->right != NULL){
+    soma++;
+  }
+        _um_filho(node -> left);
+        _um_filho(node -> right); 
 
+    return soma;
 }
+ 
+
+
+  
+
 
 
