@@ -2,6 +2,9 @@
 #include <sstream>
 #include <string>
 #include "Tree.h"
+#include <vector>
+#include <cstring>
+
 
 struct Node {
     int key;
@@ -80,9 +83,21 @@ void Tree::_bshow(Node *node, std::string heranca) {
 
 std::string Tree::find_path(int value) {
     // TODO
+
+ return _find_path(_root, value);
 }
 
 std::string Tree::_find_path(Node *node, int value) {
     // TODO
+
+    if(node == NULL ) return "";
+    if (node->key == value)    
+        return "x";
+     std::string L =_find_path(node->left, value);
+     if  (L != "") return "l "+L;
+           L= _find_path(node->right, value); 
+    if(L!= "") return "r "+L;
+    return "";
+       
 }   
 
