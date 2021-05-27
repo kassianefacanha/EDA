@@ -84,22 +84,17 @@ void Tree::_bshow(Node *node, std::string heranca) {
 
 
 bool Tree::identical(Tree *t) { // TODO 
-    return _identical(_root, _root);
+    return _identical(_root,t->_root);
 }
 
 bool Tree::_identical(Node *nd1, Node *nd2) { // TODO
- if (nd1 == NULL && nd2 == NULL) 
-        return 1; 
-  
-    if (nd1 != NULL && nd2 != NULL) { 
-        if(   nd1->key == nd2->key && 
-            _identical(nd1->left,nd2->left) && 
-            _identical(nd1->right,nd2->right) )
-        return true;
-    } 
+if (nd1 == NULL && nd2 == NULL) 
+        return true; 
+if((nd1 != NULL && nd2 == NULL) || (nd1 == NULL && nd2 != NULL)){
+  return false;
+  }
+  return ((nd1->key == nd2->key ) && (_identical(nd1->left,nd2->left)) &&  (_identical(nd1->right,nd2->right)));
       
-   
-    return false;
 }
 
 Tree *Tree::clone() { // TODO
@@ -114,10 +109,10 @@ Node *Tree::_clone(Node *node) { // TODO
  
 if(node == NULL) return NULL;
 
-    Node newNode(node->key);
-    newNode.left = _clone(node->left);
-    newNode.right = _clone(node->right);
-    return &newNode;
+    Node * newNode = new Node(node->key);
+    newNode->left = _clone(node->left);
+    newNode->right = _clone(node->right);
+    return newNode;
 
 }
 
