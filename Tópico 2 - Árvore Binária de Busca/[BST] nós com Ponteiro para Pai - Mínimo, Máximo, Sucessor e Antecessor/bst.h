@@ -220,7 +220,14 @@ return aux->key;
 Node *BST::successor(Node *node) {
     // TODO
     if (!node) return nullptr;
+if(node->right != NULL)
     return minimum(node->right);
+Node * y = node->parent;
+while(y != NULL && node == y->right){
+	node = y;
+	y = y->parent;
+}
+return y;
 }
 // Funcao publica (obrigatoriamente iterativa)
 // Recebe um inteiro k como argumento e:

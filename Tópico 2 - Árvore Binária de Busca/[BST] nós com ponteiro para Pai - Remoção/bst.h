@@ -176,16 +176,24 @@ void BST::remove(int k) {
     }
  
     else {
-        Node* p = NULL;
+         Node* p = NULL;
         Node* temp;
-        temp = curr->right;
-        while (temp->left != NULL) {
-            p = temp;
-            temp = temp->left;
-        }
- 
-        if (p != NULL)
-            p->left = temp->right;
+        if(curr->right != NULL){
+		temp = curr->right;
+        	while (temp->left != NULL) {
+           	 p = temp;
+            	temp = temp->left;
+        	}
+ }else{
+	temp = curr->parent;
+	p = curr;
+	while(temp != NULL && p == temp->right){
+	p = temp;
+	temp = temp->parent;
+}
+}
+        if (temp->parent != NULL)
+            temp->parent->left = temp->right;
         else
             curr->right = temp->right;
  
