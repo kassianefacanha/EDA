@@ -95,6 +95,27 @@ bool BST::add(int k) {
 // valores das chaves. Dica: use a estrutura de dados pilha (stack)
 void BST::preorder() {
     // TODO
+
+    Stack<Integer> s = new Stack<Integer>();
+      int root = Integer.MIN_VALUE;
+      for(int i=0;i<n;i++)
+      {
+          // if current node is smaller than the root
+          // the current node lies on the right of root
+          // thus it is impossible for bst
+          if (input[i] < root)
+              return false;
+          // keep removing elements smaller than the root
+          // until you find an element which is greater than the root
+          while(!s.empty() && s.peek()<input[i]){
+              root = s.peek();
+              s.pop();
+          }
+          // if current element is smaller than the root
+          // push it into stack
+          s.push(input[i]);
+      }
+ 
 }
 
 // Funcao publica 'inorder'

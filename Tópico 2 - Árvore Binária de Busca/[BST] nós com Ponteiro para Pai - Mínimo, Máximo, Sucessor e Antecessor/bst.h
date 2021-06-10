@@ -107,6 +107,34 @@ BST::~BST() {
 // Lembre-se que nao podem haver chaves repetidas na nossa arvore.
 bool BST::add(int k) {
     //TODO: adicione aqui o codigo feito no exercicio anterior
+       Node *curr = root;
+    Node *parent = nullptr;
+ 
+    if (root == nullptr){
+        root = new Node(k);
+        return true;
+    }
+
+    while (curr != nullptr) {
+        parent = curr;
+    if (curr->key == k) return false;
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+ 
+    if (k < parent->key) {
+        parent->left = new Node(k);
+        parent->left-> parent = parent;
+    }
+    else {
+        parent->right = new Node(k);
+        parent->right-> parent = parent;
+    }
+    
+   return true;
 }
 
 // Funcao privada 'search'
@@ -115,26 +143,45 @@ bool BST::add(int k) {
 // caso contrario, devolve nullptr;
 Node *BST::search(int k) {
     //TODO: adicione aqui o codigo feito no exercicio anterior
+      Node *curr = root;
+
+    while (curr != nullptr && curr->key != k) {
+        
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+return curr;
 }
 
 // Funcao publica (obrigatoriamente iterativa)
 // Devolve o menor valor de chave da arvore.
 int BST::minimum() {
     // TODO
+return minimum(root)->key;
 }
+
 
 // Funcao privada (obrigatoriamente iterativa)
 // Recebe como argumento o ponteiro para a raiz de uma arvore
 // e devolve o ponteiro para o no com a menor chave na arvore.
 // Se a arvore for vazia, devolve nullptr
+
 Node *BST::minimum(Node *node) {
     // TODO
+	if(node == NULL) return NULL;
+    while(node->left != NULL)
+        node = node->left;
+    return node;
 }
 
 // Funcao publica (obrigatoriamente iterativa)
 // Devolve o maior valor de chave da arvore
 int BST::maximum() {
     // TODO
+    return  maximum(root)-> key;
 }
 
 // Funcao privada (obrigatoriamente iterativa)
@@ -143,6 +190,10 @@ int BST::maximum() {
 // Se a arvore for vazia, devolve nullptr
 Node *BST::maximum(Node *node) {
     // TODO
+	if(node == NULL) return NULL;
+    while(node->right != NULL)
+        node = node->right;
+    return node;
 }
 
 // Funcao publica (obrigatoriamente iterativa)
@@ -153,16 +204,24 @@ Node *BST::maximum(Node *node) {
 // chave sucessora de k quando esta existe
 int BST::successor(int k) {
     // TODO
-}
 
+  Node * aux;
+  aux=successor(search(k));
+  if (aux == NULL){
+        return INT_MAX;
+    } 
+return aux->key;
+  
+}
 // Funcao privada (obrigatoriamente iterativa)
 // Recebe um ponteiro para um Node e:
 // (1) devolve nullptr quando node nao tem sucessor; ou
 // (2) caso contrario, devolve o ponteiro para o no sucessor de node.
 Node *BST::successor(Node *node) {
     // TODO
+    if (!node) return nullptr;
+    return minimum(node->right);
 }
-
 // Funcao publica (obrigatoriamente iterativa)
 // Recebe um inteiro k como argumento e:
 // (1) devolve INT_MIN se a chave k nao esta presente na arvore ou 
@@ -171,6 +230,13 @@ Node *BST::successor(Node *node) {
 // antecessora de k quando esta existe.
 int BST::predecessor(int k) {
     // TODO
+  Node * aux;
+  aux=predecessor(search(k));
+  if (aux == NULL){
+        return INT_MIN; 
+    } 
+return aux->key;
+ 
 }
 
 // Funcao privada (obrigatoriamente iterativa)
@@ -179,6 +245,13 @@ int BST::predecessor(int k) {
 // (2) caso contrario, devolve o ponteiro para o no antecessor de node.
 Node *BST::predecessor(Node *node) {
     // TODO
+    if (!node) return nullptr;
+	if(node->left != nullptr) return maximum(node->left);
+Node * y = node->parent;
+while(y!=NULL && node == y->left){
+	node = y;
+	y = y->parent;
 }
-
+return y;
+}
 #endif 

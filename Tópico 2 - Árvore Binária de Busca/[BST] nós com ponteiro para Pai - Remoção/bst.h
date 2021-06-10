@@ -107,6 +107,36 @@ void BST::preorder(Node *node) {
 // Lembre-se que nao podem haver chaves repetidas na nossa arvore.
 bool BST::add(int k) {
     // TODO: adicione aqui o codigo feito no primeiro exercicio
+    
+    Node *curr = root;
+    Node *parent = nullptr;
+ 
+    if (root == nullptr){
+        root = new Node(k);
+        return true;
+    }
+
+    while (curr != nullptr) {
+        parent = curr;
+    if (curr->key == k) return false;
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+ 
+    if (k < parent->key) {
+        parent->left = new Node(k);
+        parent->left-> parent = parent;
+    }
+    else {
+        parent->right = new Node(k);
+        parent->right-> parent = parent;
+    }
+    
+   return true;
+
 }
 
 // Funcao publica iterativa 'remove'
@@ -114,7 +144,56 @@ bool BST::add(int k) {
 // de modo que a arvore resultante continua binaria de busca
 // O algoritmo de remocao aqui deve seguir o que foi visto em sala.
 void BST::remove(int k) {
-    // TODO
-}
 
+    Node* curr = root;
+    Node* prev = NULL;
+
+    while (curr != NULL && curr->key != k) {
+        prev = curr;
+        if (k < curr->key)
+            curr = curr->left;
+        else
+            curr = curr->right;
+    }
+    if (curr == NULL) {
+        cout << "Key não encontrada" ;
+    }
+ 
+    if (curr->left == NULL || curr->right == NULL) {
+        Node* newCurr;
+        if (curr->left == NULL)
+            newCurr = curr->right;
+        else
+            newCurr = curr->left;
+
+        if (curr == prev->left)
+            prev->left = newCurr;
+        else
+            prev->right = newCurr;
+	if(newCurr != NULL) newCurr->parent = prev;
+
+        delete(curr);
+    }
+ 
+    else {
+        Node* p = NULL;
+        Node* temp;
+        temp = curr->right;
+        while (temp->left != NULL) {
+            p = temp;
+            temp = temp->left;
+        }
+ 
+        if (p != NULL)
+            p->left = temp->right;
+        else
+            curr->right = temp->right;
+ 
+        int troca = temp->key;
+	temp->key = curr->key;
+	curr->key=troca; 
+        delete(temp);
+    }
+    
+}
 #endif 

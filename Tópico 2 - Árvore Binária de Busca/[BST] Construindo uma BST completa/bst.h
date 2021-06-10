@@ -101,6 +101,35 @@ int BST::height(Node *node) {
 // Lembre-se que nao podem haver chaves repetidas na nossa arvore.
 bool BST::add(int k) {
     //TODO: adicione aqui o codigo feito no primeiro exercicio
+
+    Node *curr = root;
+    Node *parent = nullptr;
+ 
+    if (root == nullptr){
+        root = new Node(k);
+        return true;
+    }
+
+    while (curr != nullptr) {
+        parent = curr;
+    if (curr->key == k) return false;
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+ 
+    if (k < parent->key) {
+        parent->left = new Node(k);
+        parent->left-> parent = parent;
+    }
+    else {
+        parent->right = new Node(k);
+        parent->right-> parent = parent;
+    }
+    
+   return true;
 }
 
 #endif

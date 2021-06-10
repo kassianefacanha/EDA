@@ -6,6 +6,7 @@
 using namespace std;
 #define MAX 70
 
+
 // Funcao recursiva 'construirBST_balanceada'
 // Essa funcao recebe como entrada:
 // (1) Um ponteiro para uma BST vazia;
@@ -14,6 +15,14 @@ using namespace std;
 // Uma arvore completa com n nos tem altura menor ou igual a log_2(n+1).
 void construirBST_balanceada(BST *t, int A[], int p, int q) {
 	// TODO
+	if (p <= q)
+    {
+        int mid = (p + q + 1) / 2;
+ 
+        t->add(A[mid]);
+        construirBST_balanceada(t, A, p, mid - 1);
+        construirBST_balanceada(t, A, mid + 1, q);
+    }
 }
 
 int main()

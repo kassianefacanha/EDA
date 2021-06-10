@@ -114,6 +114,34 @@ void BST::inorderParent() {
 // Lembre-se que nao podem haver chaves repetidas na nossa arvore.
 bool BST::add(int k) {
     //TODO
+    Node *curr = root;
+    Node *parent = nullptr;
+ 
+    if (root == nullptr){
+        root = new Node(k);
+        return true;
+    }
+
+    while (curr != nullptr) {
+        parent = curr;
+    if (curr->key == k) return false;
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+ 
+    if (k < parent->key) {
+        parent->left = new Node(k);
+        parent->left-> parent = parent;
+    }
+    else {
+        parent->right = new Node(k);
+        parent->right-> parent = parent;
+    }
+    
+   return true;
 }
 
 // Funcao privada 'search'
@@ -121,14 +149,36 @@ bool BST::add(int k) {
 // contem a chave k se ela existir na arvore;
 // caso contrario, devolve nullptr;
 Node *BST::search(int k) {
-    //TODO
+    Node *curr = root;
+
+    while (curr != nullptr && curr->key != k) {
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+return curr;
+
 }
 
 // Funcao publica 'contains'
 // Esta funcao devolve 'true' se a arvore contem a chave k; 
 // e devolve 'false' caso contrário.
 bool BST::contains(int k) {
-    //TODO
+   Node *curr = root;
+
+    while (curr != nullptr && curr->key != k) {
+        if (k < curr->key) {
+            curr = curr->left;
+        }else {
+            curr = curr->right;
+        }
+    }
+if(curr != NULL){ return true;}
+else{ return false;}
+  
+   
 }
 
 #endif 
