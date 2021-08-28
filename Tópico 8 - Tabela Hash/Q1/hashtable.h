@@ -3,12 +3,12 @@
 #include <vector>
 #include <list>
 #include <string>
-#include <utility> // para std::pair
-#include <functional> // para a classe std::hash
-using std::vector;
-using std::list;
-using std::pair;
-using std::hash;
+#include <utility> 
+#include <functional> 
+
+using namespace std;
+
+
 
 // This hashtable works only for Tkey objects that
 // provide a hash function and equality operator==
@@ -16,6 +16,7 @@ using std::hash;
 template <typename Tkey, typename Tval>
 class HashTable {
 private:
+    
     vector<list<pair<Tkey,Tval>>> table; // vector de list de pair<Tkey,Tval>
 
     int currentSize; // Guarda o numero de chaves da tabela
@@ -34,8 +35,10 @@ private:
     // podem estar em listas diferentes da que estavam antes.
     // Note que os pares (chave,valor) terao que ser inseridos um por um na nova tabela criada.
     void rehash();
+    
 
 public:
+    
     // As linhas abaixo fazem com que as duas funcoes sejam deletadas.
     // Ou seja, nao sera possivel usar o operador de atribuicao entre 
     // dois objetos desta classe, assim como nao sera possivel 
@@ -78,8 +81,10 @@ public:
     // Imprime a tabela hash apenas para fins de teste.
     // Essa funcao geralmente nao existe numa tabela hash profissional.
     void print() const;
-};
+  
 
+
+};
 // Funcao auxiliar
 // Devolve 'true' se o inteiro n for primo;
 // Devolve 'false' caso contrario.
@@ -102,21 +107,21 @@ int nextPrime(int n) {
     while( !isPrime(n) ) n += 2;
     return n;
 }
-
 template <typename Tkey, typename Tval>
 HashTable<Tkey,Tval>::HashTable(int tableSize) {
-    table.resize((tableSize != 101) ? nextPrime(tableSize): tableSize);
+    table.resize(tableSize);
     currentSize = 0;
 }
 
 template <typename Tkey, typename Tval>
 size_t HashTable<Tkey,Tval>::hashFunction(const Tkey& x) const {
-    hash<Tkey> hf;
-    return hf(x) % table.size();  // Division method
+    std::hash<Tkey> ff;
+    size_t hashcode = ff(x);
+    return hashcode % table.size();
 }
 
 template <typename Tkey, typename Tval>
-void HashTable<Tkey,Tval>::insert(const Tkey& x, const Tval& y) { 
+void HashTable<Tkey,Tval>::insert(const Tkey& x, const Tval& y) {
     size_t slot = hashFunction(x);
     for(const auto& p : table[slot])
         if(p.first == x)
@@ -126,13 +131,18 @@ void HashTable<Tkey,Tval>::insert(const Tkey& x, const Tval& y) {
 
     if(static_cast<float>(currentSize)/table.size() > 0.8)
         rehash();
+
 }
 
 template <typename Tkey, typename Tval>
 void HashTable<Tkey,Tval>::print() const {
-
+     for(size_t slot = 0; slot < table.size(); slot++) {
+        std::cout << "T[" << slot << "]: ";
+        for(const auto& p : table[slot])
+            std::cout << "(" << p.first << "," << p.second << ")";
+        std::cout << std::endl;
+    }
 }
-
 template <typename Tkey, typename Tval>
 int HashTable<Tkey,Tval>::size() const { // TODO
     return currentSize;
@@ -140,47 +150,62 @@ int HashTable<Tkey,Tval>::size() const { // TODO
 
 template <typename Tkey, typename Tval>
 void HashTable<Tkey,Tval>::clear() { // TODO
-   
+    for(size_t i = 0; i < table.size(); ++i)
+    table[i].clear();
+    
+    currentSize=0;
+
 }
 
 template <typename Tkey, typename Tval>
 bool HashTable<Tkey,Tval>::contains(const Tkey& x) const { // TODO
-    for (int i = hashFunction(x); a[i] != 0; i = (i + 1) % table.size())
-    if (a[i] == x)
-    return true;
-return false;
+    size_t slot = hashFunction(x);
+        for(const auto& p : table[slot])
+        if( x == p.first )
+                return true;
+    return false;
 }
 
 template <typename Tkey, typename Tval>
 bool HashTable<Tkey,Tval>::search(const Tkey& x, Tval& y) { // TODO
-        int ind = x % table.size();
-        while((table[ind].x != x) and (table[ind].x != -1)){
-            ind = (ind + 1) % table.size();
+    size_t slot = hashFunction(x);
+         for(const auto& p : table[slot])
+            if( x == p.first ){
+            y = p.second;
+                return true;
         }
-        return ind;
+
+    return false;
+      
+
 }
 
 template <typename Tkey, typename Tval>
 void HashTable<Tkey,Tval>::remove(const Tkey& x) { // TODO
-        int ind = search(x);
-        //removo o primeiro
-        table[ind].x = -1;
-        int next = (ind + 1) % table.size();
-        //vou removendo e reinserindo os proximos até encontrar uma posicao vazia
-        while(table[next].x != -1){
-            item aux = table[next];//salvo o item
-            currentSize--;
-            table[next].x = -1;//apago da posicao
-
-            this->insert(aux.x, aux.data);//reinsiro o item
-            next = (next + 1) % table.size();//vou para proxima posicao
+    size_t slot = hashFunction(x);
+    list<pair<Tkey,Tval>> list_aux;
+        for(const auto& p : table[slot]){
+            if( x == p.first){
+            this->currentSize --;
+            }else{
+            list_aux.push_back(p);
+            }
         }
-        return true;
+    table[slot] = list_aux;
 }
 
 template <typename Tkey, typename Tval>
 void HashTable<Tkey,Tval>::rehash() { // TODO
+     HashTable <Tkey,Tval> table_aux (nextPrime(2*table.size( )));
+     for(size_t i = 0; i < table.size(); ++i) 
+        for(auto it = table[i].begin(); it != table[i].end(); ++it)
+        table_aux.insert(it->first, it->second);
     
+    this-> table = table_aux.table;
+       
+  
+    
+
 }
 
 #endif
