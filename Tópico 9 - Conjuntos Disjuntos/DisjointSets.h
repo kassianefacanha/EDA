@@ -87,18 +87,34 @@ Representative *DisjointSets::find(const int& elem) {
 
 void DisjointSets::unionSets(const int& elem1, const int& elem2) {
 
-    Representative *vol1 = find(elem1); 
-	Representative *vol2 = find(elem2); 
-    Node *newN = vol2->head;
-    while (newN != 0){
-        newN->repr =vol1;
-        newN = newN->next;
+    if(elem1 < elem2){
+        Representative *vol1 = find(elem1); 
+    	Representative *vol2 = find(elem2);
+    	  Node *newN = vol2->head;
+        while (newN != 0){
+            newN->repr =vol1;
+            newN = newN->next;
+        }
+      
+        (vol1->tail)->next = vol2->head;
+        vol1->tail = vol2->tail;
+      
+        delete vol2;
+    }else{
+        Representative *vol1 = find(elem2); 
+    	Representative *vol2 = find(elem1);
+    	  Node *newN = vol2->head;
+        while (newN != 0){
+            newN->repr =vol1;
+            newN = newN->next;
+        }
+      
+        (vol1->tail)->next = vol2->head;
+        vol1->tail = vol2->tail;
+      
+        delete vol2;
     }
   
-    (vol1->tail)->next = vol2->head;
-    vol1->tail = vol2->tail;
-  
-    delete vol2;
 }
 void DisjointSets::printSet(const int& elem){
    
