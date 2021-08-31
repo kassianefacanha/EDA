@@ -206,16 +206,16 @@ bool HashTable<Tkey,Tvalue>::remove( const Tkey &x )
 template <typename Tkey, typename Tvalue>
 void HashTable<Tkey,Tvalue>::rehash() 
 { // TODO
-    HashTable <Tkey,Tvalue> table_aux (nextPrime(2*table.size( )));
-     for(size_t i = 0; i < table.size(); ++i) 
-        for(auto it = table[i].begin(); it != table[i].end(); ++it)
-         table[i].status = EMPTY;
-
-    
-     for(size_t i = 0; i < table_aux.size(); ++i) 
-        for(auto it = table_aux.begin(); it != table_aux[i].end(); ++it)
-        if( table_aux[it].status == ACTIVE )
-        table_aux.insert(it->first, it->second);
+    std::vector<HashEntry> table_aux (nextPrime(2*table.size( )));;
+	for (int i = 0; i < table_aux.size(); i++)
+		table_aux[i].status = EMPTY;
+	currentSize = 0;
+	for (int i = 0; i < table.size(); i++)
+	{
+		if (table[i].status == ACTIVE)
+			insert(table_aux[i].element.first,table_aux[i].element.second);
+	}
+       
     
     
        
