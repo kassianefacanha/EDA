@@ -64,7 +64,7 @@ private:
 
     void checkVertex(int v){
         if (v < 0 || v > N - 1){
-            throw runtime_error("Intervalo de valor de vertice invalido");
+               cout << "Intervalo invalido"<< endl;
         }
     }
 
@@ -72,7 +72,7 @@ public:
     // Construtor
     MGraph(int n){
         if (n <= 0){
-            throw runtime_error("Tamanho Invalido");
+              cout << "Tamanho invalido"<< endl;
         }
         N = n;
         M = 0;
@@ -117,7 +117,7 @@ public:
 
     void setEdgeWeight(int v1, int v2, int wgt){
         if (wgt < 0){
-            throw runtime_error("Peso negativo");
+           cout << "Peso negativo"<< endl;
         }
         if (!isEdge(v1, v2)){
             ++M;
@@ -171,7 +171,7 @@ public:
     }
 
     bool isBipartite(){
-        int color[N];
+        int *color= new int[N];
         for (int i = 0; i < N; ++i){
             color[i] = -1;
         }
@@ -188,15 +188,7 @@ public:
 
         
         cout << "SIM" << endl;
-        for (int i = 0; i < N; i++){
-            if (color[i] == 1){
-                cout << i << " R" << endl;
-            }
-            else{
-                cout << i << " B" << endl;
-            }
-        }
-
+      
         return true;
     }
 

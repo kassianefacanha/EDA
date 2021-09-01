@@ -1,63 +1,32 @@
 #include <iostream>
 #include "grafo.h"
-#include "grafo.h"
-#include <fstream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
-#include <vector>
 #include <list>
-#include <queue>
+
 
 using namespace std;
 
 
-void trataDado(string dados, Graph *grafo);
-
 int main(){
     Graph *grafo;
-    fstream myfile;
-    string line;
-    myfile.open("grafos.txt");
-   
-    getline(myfile, line);
-    int n = stoi(line);
-    grafo = new MGraph(n);
-
-    while (myfile.good()){ 
-        getline(myfile, line);
-        if (line != "") { 
-            if (line != "0 0"){
-                trataDado(line, grafo);
-            }
-            else{
-                grafo->isBipartite();
-                grafo->~Graph();
-                getline(myfile, line);
-                int n = stoi(line);
-                if (n != 0){
-                    grafo = new MGraph(n);
-                }
-                else{
-                    getline(myfile, line);
-                }
-            }
+    int d, key1, key2;
+    cin >> d;
+    while(true){
+        grafo = new MGraph(d);
+        cin >>key1;
+        cin >>key2;
+        while(key1!=0 || key2!=0){
+            grafo->addEdge(key1,key2);
+            cin >>key1;
+            cin.ignore();
+            cin >>key2;
+            cin.ignore();
         }
+        grafo->isBipartite();
+        delete grafo; 
+        cin >> d;
+        if(d==0) return 0;             
     }
     return 0;
-}
-
-
-void trataDado(string dados, Graph *grafo){
-
-    int n1, n2;
-    stringstream aux;
-    aux << dados; 
-    getline(aux, dados, ' '); 
-    n1 = stoi(dados); 
-    getline(aux, dados, '\n'); 
-    n2 = stoi(dados); 
-    
-    grafo->addEdge(n1, n2);
-    grafo->addEdge(n2, n1); 
 }
