@@ -1,0 +1,3 @@
+o menor ancestral comum de 11 e 8 é 1
+o menor ancestral comum de 7 e 9 é 1
+o menor ancestral comum de 3 e 5 é 0
