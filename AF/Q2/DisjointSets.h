@@ -78,6 +78,7 @@ void DisjointSets::unionSets( int x, int y ) {
 
 
 void DisjointSets::MCA(int u) {
+    std::vector<mca>& lcas;
 	makeSets(u);
 	sets[u].ancestor = u;
 	std::vector<int>& children = sets[u].children;
@@ -89,7 +90,7 @@ void DisjointSets::MCA(int u) {
 	}
 	sets[u].color = black;
 	for (size_t i = 0, j = children.size(); i < j; i++) {
-	    mca& l = children[i];
+	    mca& l = lcas[i];
 		if (l.p == u && sets[l.v].color == black) {
 			l.ancestor = sets[findSet(l.v)].ancestor;
             std::cout << "menor ancestral comum de" << l.p << " e " << l.v <<" é" << l.ancestor;
