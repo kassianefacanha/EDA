@@ -9,11 +9,12 @@ using namespace std;
 
 
 int main(){
-    Graph *grafo;
+    Graph *grafo, *transposto;
     int d, key1, key2;
     cin >> d;
     while(true){
-        grafo = new MGraph(d);
+        grafo = new MGraph(d); //MATRIZ
+       grafo = new LGraph(d);//LISTA
         cin >>key1;
         cin >>key2;
         while(key1!=0 || key2!=0){
@@ -23,8 +24,10 @@ int main(){
             cin >>key2;
             cin.ignore();
         }
-        grafo->isBipartite();
-        delete grafo; 
+        transposto = grafo->transpose();
+        transposto->print();
+        delete grafo;
+        delete transposto; 
         cin >> d;
         if(d==0) return 0;             
     }

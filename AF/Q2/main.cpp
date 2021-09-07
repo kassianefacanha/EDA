@@ -22,7 +22,8 @@ int main()
 	// PRINT
 	int u;
 	while(cin>>u)
-		p->printSet(u);
+		p->MCA(u);
 
 	return 0;
+	
 }

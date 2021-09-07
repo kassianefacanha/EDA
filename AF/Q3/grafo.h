@@ -30,37 +30,21 @@ public:
     virtual ~Graph() {} 
 
     virtual int n() = 0;
-    virtual int m() = 0;
-
-    virtual std::list<int>& neighbors(int v) = 0; 
-
-    virtual std::list<Edge>& incidentEdges(int v) = 0;
-
-    virtual void setEdgeWeight(int v1, int v2, int wgt) = 0;
 
     virtual void addEdge(int v1, int v2) = 0;
 
-    virtual void delEdge(int v1, int v2) = 0;
+    virtual void print() =0;
 
-    virtual bool isEdge(int v1, int v2) = 0;
+    virtual Graph * transpose()=0;
 
-    virtual int weight(int v1, int v2) = 0;
 
-    virtual int getMark(int v) = 0;
-
-    virtual void setMark(int v, int value) = 0;
-
-    virtual bool colore(int vert, int color[]) = 0;
-    
-    virtual bool isBipartite() = 0;
 };
 
 class MGraph : public Graph{
 private:
     int N;        
     int M;       
-    int **matrix; 
-    int *mark;    
+    int **matrix;    
 
     void checkVertex(int v){
         if (v < 0 || v > N - 1){
@@ -75,8 +59,6 @@ public:
               cout << "Tamanho invalido"<< endl;
         }
         N = n;
-        M = 0;
-        mark = new int[n];
         matrix = new int *[n];
         for (int i = 0; i <= n - 1; i++){
             matrix[i] = new int[n];
@@ -91,7 +73,6 @@ public:
 
    
     ~MGraph(){
-        delete[] mark;
         for (int i = 0; i < N; i++){
             delete[] matrix[i];
         }
@@ -101,132 +82,65 @@ public:
     int n(){
         return N;
     }
-    int m(){
-        return M;
-    }
-
-    list<int> &neighbors(int v){
-        list<int> *lis = new list<int>();
-        for (int i = 0; i < N; i++){
-            if (matrix[v][i] != 0){
-                lis->push_back(i);
-            }
-        }
-        return *lis;
-    }
-
-    void setEdgeWeight(int v1, int v2, int wgt){
-        if (wgt < 0){
-           cout << "Peso negativo"<< endl;
-        }
-        if (!isEdge(v1, v2)){
-            ++M;
-        }
-        matrix[v1][v2] = wgt;
-        matrix[v2][v1] = wgt;
-    }
-
     void addEdge(int v1, int v2){
-        setEdgeWeight(v1, v2, 1);
+        matrix[v1][v2] = 1;
     }
 
-    void delEdge(int v1, int v2){
-        if (isEdge(v1, v2)){
-            M--;
-            matrix[v1][v2] = 0;
+    Graph * transpose(){
+        Graph * transposto = new MGraph(N);
+
+        for(int i=0; i<N; i++){
+            for(int j=0;j<N;j++)
+                if(matrix[i][j]==1)
+                transposto->addEdge(j,i);
+        }
+        return transposto;
+    }
+    void print(){
+        for(int i=0; i< N; i++){
+            for(int j=0;j<N;j++)
+                if(matrix[i][j]==1) cout<<i<< " "<<j<<endl;
+        }
+    }
+};
+
+class LGraph : public Graph {
+private:
+    int N; 				
+	list<int> *liste;
+
+public:
+    explicit LGraph(int n) {
+		this->N = n; 				
+		liste = new list<int>[N]; 	
+	}
+     ~LGraph() /*override*/ {
+		  delete[] liste;
+	}
+    int n(){
+        return N;
+    }
+    void addEdge(int v1, int v2){
+        liste[v1].push_back(v2);
+    }
+    Graph * transpose(){
+        Graph * transposto = new LGraph(N);
+        list<int>::iterator it;
+
+        for(int i=0; i<N; i++){
+            for(it = liste[i].begin(); it !=liste[i].end();it++)
+                transposto->addEdge(*it,i);
+        }
+        return transposto;
+    }
+    void print(){
+        list<int>::iterator it;
+         for(int i=0; i<N; i++){
+            for(it = liste[i].begin(); it !=liste[i].end();it++)
+                cout<<i << " "<<*it <<endl;
         }
     }
 
-    bool isEdge(int v1, int v2){
-        return (matrix[v1][v2] > 0);
-    }
-
-    int weight(int v1, int v2){
-        if (isEdge(v1, v2)){
-            return matrix[v1][v2];
-        }
-        else{
-            return 0;
-        }
-    }
-
-    int getMark(int v){
-        return mark[v];
-    }
-
-
-    void setMark(int v, int value){
-        checkVertex(v);
-        mark[v] = value;
-    }
-
-    list<Edge> &incidentEdges(int v){
-        list<Edge> *lis = new list<Edge>();
-        for (int i = 0; i < N; i++){
-            if (matrix[v][i] != 0){
-                lis->push_back(Edge(i, matrix[v][i]));
-            }
-        }
-        return *lis;
-    }
-
-    bool isBipartite(){
-        int *color= new int[N];
-        for (int i = 0; i < N; ++i){
-            color[i] = -1;
-        }
-        
-
-        for (int i = 0; i < N; i++){
-            if (color[i] == -1){
-                if (colore(i, color) == false){
-                    cout << "NAO" << endl;
-                    return false;
-                }
-            }
-        }
-
-        
-        cout << "SIM" << endl;
-      
-        return true;
-    }
-
-
-    bool colore(int vert, int color[]){
-        color[vert] = 1;
-        
-        queue<int> q;
-        q.push(vert);
-
-       
-        while (!q.empty()){
-            
-            int u = q.front();
-            q.pop();
-
-          
-            if (isEdge(u, u)){
-                return false;
-            }
-            
-          
-            for (int v = 0; v < N; ++v){
-               
-                if (isEdge(u, v) && color[v] == -1){
-                    color[v] = 1 - color[u];
-                    q.push(v);
-                }
-
-               
-                else if (isEdge(u, v) && color[v] == color[u]){
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 };
 
 #endif
