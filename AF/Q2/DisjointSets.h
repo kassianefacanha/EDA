@@ -6,13 +6,19 @@
  * Implementation of the disjoint-sets data structure
  * using path compression and union by rank
  */
+struct mca { 
+        int p, v;
+        int ancestor;
+        };
+
 class DisjointSets {
 public:
+    
     explicit DisjointSets( int numElements );
     int findSet( int x );
     void unionSets( int x, int y );
     void makeSets(int x);
-    void MCA(int u);
+    void MCA(int u, std::vector<mca>& mcas);
 private:
     enum {white, black};
     struct Node { 
@@ -22,13 +28,12 @@ private:
 	    int color;
 	    int ancestor;
 	    std::vector<int> children;
+        
 
-	    Node() : distance(0), color(white), ancestor(-1) {}};
-        struct mca { 
-        int p, v;
-        int ancestor;
-        };
+	    Node() : parent(-1), distance(0), color(white), ancestor(-1) {}};
+       
         std::vector<Node> sets;
+        
     
 };
 
@@ -77,27 +82,30 @@ void DisjointSets::unionSets( int x, int y ) {
 }
 
 
-void DisjointSets::MCA(int u) {
-    std::vector<mca>& lcas;
+void DisjointSets::MCA(int u, std::vector<mca>& mcas) {
+    
 	makeSets(u);
 	sets[u].ancestor = u;
 	std::vector<int>& children = sets[u].children;
-	for (size_t i = 0, j = children.size(); i < j; i++) {
+    for (size_t i = 0, j = children.size(); i < j; i++) {
 		int v = children[i];
-		MCA(children[i]);
+		MCA(children[i], mcas);
 		unionSets(u, v);
 		sets[findSet(u)].ancestor = u;
 	}
 	sets[u].color = black;
-	for (size_t i = 0, j = children.size(); i < j; i++) {
-	    mca& l = lcas[i];
+	for (size_t i = 0, j = mcas.size(); i < j; i++) {
+	    mca& l = mcas[i];
 		if (l.p == u && sets[l.v].color == black) {
 			l.ancestor = sets[findSet(l.v)].ancestor;
-            std::cout << "menor ancestral comum de" << l.p << " e " << l.v <<" é" << l.ancestor;
+            std::cout << "menor ancestral comum de " << l.p << "   e   " << l.v <<"  es   " << l.ancestor;
+            std::cout << '\n';
+           
 		}
 		else if (l.v == u && sets[l.p].color == black) {
 			l.ancestor = sets[findSet(l.p)].ancestor;
-             std::cout << "menor ancestral comum de" << l.p << " e " << l.v <<" é" << l.ancestor;
+             std::cout << "menor ancestral comum de " << l.p << "  e   " << l.v <<"   es   " << l.ancestor;
+             std::cout << '\n';
 		}
 	}
 }

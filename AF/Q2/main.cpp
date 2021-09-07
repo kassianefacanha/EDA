@@ -10,20 +10,24 @@ int main()
 {
 	int n;
 	cin >> n;
+	std::vector<mca> mcas(n);
 	DisjointSets *p = new DisjointSets(n);
+		for (int i = 0; i < n; i++) {
+			int prim, seg;
+			cin >> prim;
+			cin >> seg;
+			prim--, seg--;
+			mcas[i].p = prim; mcas[i].v = seg;
+		}
 	
-	while(true) {
-		int pri, seg;
-		cin >> pri;
-		cin >> seg;
-		if(pri == 0 && seg == 0) break;
-		p->unionSets(pri, seg);	    	
-	}
-	// PRINT
 	int u;
-	while(cin>>u)
-		p->MCA(u);
+	while(true){
+cin>>u;
+p->MCA(u, mcas);
+
+	}
+		
 
 	return 0;
-	
+
 }
