@@ -6,6 +6,9 @@
 
 using namespace std;
 
+
+
+
 int main() 
 {
 	DisjointSets p;
